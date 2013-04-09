@@ -646,6 +646,35 @@ public class SlidingMenu extends RelativeLayout {
 		int i = (int) getContext().getResources().getDimension(res);
 		setBehindWidth(i);
 	}
+	
+	@SuppressWarnings("deprecation")
+	public void setSecondaryBehindWidth(int i) {
+		int width;
+		Display display = ((WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE))
+				.getDefaultDisplay();
+		try {
+			Class<?> cls = Display.class;
+			Class<?>[] parameterTypes = {Point.class};
+			Point parameter = new Point();
+			Method method = cls.getMethod("getSize", parameterTypes);
+			method.invoke(display, parameter);
+			width = parameter.x;
+		} catch (Exception e) {
+			width = display.getWidth();
+		}
+		mViewBehind.setSecondaryWidthOffset(width-i);
+	}
+	
+	/**
+	 * Sets the behind width for the secondary menu.
+	 *
+	 * @param res The dimension resource id to be set as the behind width offset.
+	 * The menu, when open, will open this wide.
+	 */
+	public void setSecondaryBehindWidthRes(int res) {
+		int i = (int) getContext().getResources().getDimension(res);
+		setSecondaryBehindWidth(i);
+	}
 
 	/**
 	 * Gets the behind scroll scale.

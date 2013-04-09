@@ -346,6 +346,14 @@ public class CustomViewAbove extends ViewGroup {
 			return mViewBehind.getBehindWidth();
 		}
 	}
+	
+	public int getSecondaryBehindWidth() {
+		if(mViewBehind == null) {
+			return 0;
+		} else {
+			return mViewBehind.getSecondaryBehindWidth();
+		}
+	}
 
 	public int getChildWidth(int i) {
 		switch (i) {
@@ -823,7 +831,17 @@ public class CustomViewAbove extends ViewGroup {
 	}
 
 	protected float getPercentOpen() {
-		return Math.abs(mScrollX-mContent.getLeft()) / getBehindWidth();
+		final float actual = (int) (mScrollX - mContent.getLeft());
+		switch(mViewBehind.getMode()) {
+			case SlidingMenu.LEFT_RIGHT: {
+				if(actual < 0) { // left menu
+					return Math.abs(actual) / getBehindWidth();
+				} else { // right menu
+					return Math.abs(actual) / getSecondaryBehindWidth();
+				}
+			}
+		}
+		return Math.abs(actual) / getBehindWidth();		
 	}
 
 	@Override
