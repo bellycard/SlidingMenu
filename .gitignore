@@ -1,5 +1,5 @@
 *.class
-
+*.DS_STORE
 # Package Files #
 *.dex
 *.war
@@ -13,4 +13,4 @@ release
 gen
 .metadata/
 .metadata
-*.project
+#*.project
