@@ -86,7 +86,7 @@ public class SlidingMenu extends RelativeLayout {
 		/**
 		 * On open.
 		 */
-		public void onOpen();
+		public void onOpen(boolean isSecondary);
 	}
 
 	/**
@@ -124,7 +124,7 @@ public class SlidingMenu extends RelativeLayout {
 		/**
 		 * On close.
 		 */
-		public void onClose();
+		public void onClose(boolean isSecondary);
 	}
 
 	/**
@@ -212,16 +212,21 @@ public class SlidingMenu extends RelativeLayout {
 		mViewAbove.setOnPageChangeListener(new OnPageChangeListener() {
 			public static final int POSITION_OPEN = 0;
 			public static final int POSITION_CLOSE = 1;
-
+			public static final int POSITION_SECONDARY = 2;
+			private int mPreviousPosotion = 1;
 			public void onPageScrolled(int position, float positionOffset,
 					int positionOffsetPixels) { }
 
 			public void onPageSelected(int position) {
 				if (position == POSITION_OPEN && mOpenListener != null) {
-					mOpenListener.onOpen();
+					mOpenListener.onOpen(false);
 				} else if (position == POSITION_CLOSE && mCloseListener != null) {
-					mCloseListener.onClose();
+					mCloseListener.onClose(mPreviousPosotion == POSITION_SECONDARY);
+
+				} else if(position == POSITION_SECONDARY && mCloseListener != null) {
+					mOpenListener.onOpen(true);
 				}
+				this.mPreviousPosotion = position;
 			}
 		});
 
@@ -330,6 +335,14 @@ public class SlidingMenu extends RelativeLayout {
 				content.setBackgroundResource(background);
 			break;
 		}
+//		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+//			getContent().setLayerType(View.LAYER_TYPE_HARDWARE, null);
+//			getMenu().setLayerType(View.LAYER_TYPE_HARDWARE, null);
+//			if (getSecondaryMenu() != null) {
+//				getSecondaryMenu().setLayerType(View.LAYER_TYPE_HARDWARE, null);
+//			}
+//		}
+
 	}
 
 	/**
@@ -1015,7 +1028,7 @@ public class SlidingMenu extends RelativeLayout {
 
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	public void manageLayers(float percentOpen) {
-		if (Build.VERSION.SDK_INT < 11) return;
+		if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.JELLY_BEAN) return;
 
 		boolean layer = percentOpen > 0.0f && percentOpen < 1.0f;
 		final int layerType = layer ? View.LAYER_TYPE_HARDWARE : View.LAYER_TYPE_NONE;
