@@ -849,7 +849,6 @@ public class CustomViewAbove extends ViewGroup {
 		try {
 			super.dispatchDraw(canvas);
 		} catch(NullPointerException e) {
-			Log.e("BOOM", "BOOOOOM");
 		}
 		// Draw the margin drawable if needed.
 		mViewBehind.drawShadow(mContent, canvas);
