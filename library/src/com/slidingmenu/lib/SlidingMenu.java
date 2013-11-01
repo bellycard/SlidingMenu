@@ -222,8 +222,7 @@ public class SlidingMenu extends RelativeLayout {
 					mOpenListener.onOpen(false);
 				} else if (position == POSITION_CLOSE && mCloseListener != null) {
 					mCloseListener.onClose(mPreviousPosotion == POSITION_SECONDARY);
-
-				} else if(position == POSITION_SECONDARY && mCloseListener != null) {
+				} else if(position == POSITION_SECONDARY && mOpenListener != null) {
 					mOpenListener.onOpen(true);
 				}
 				this.mPreviousPosotion = position;
